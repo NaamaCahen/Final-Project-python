@@ -13,4 +13,4 @@ login_mngr = flask_login.LoginManager(flask_app)
 db = flask_sqlalchemy.SQLAlchemy(flask_app)
 migrate = flask_migrate.Migrate(flask_app, db)
 
-from travel_app import routes,models
+from travel_app import routes, models
