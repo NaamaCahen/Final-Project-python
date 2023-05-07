@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+     <form  method="POST">
+            {{ form.hidden_tag() }}
+            <h3>LOGIN</h3>
+
+            {{form.email(placeholder="email")}}
+
+            {{form.password(placeholder="password")}}
+
+
+            {{form.remember()}}
+
+            {{form.submit()}}
+
+<!--            <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>-->
+        </form>
+</body>
+</html>
