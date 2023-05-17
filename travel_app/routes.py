@@ -1,9 +1,10 @@
+import werkzeug.utils
+
 import travel_app
 import flask
 import flask_login
 from werkzeug.security import check_password_hash, generate_password_hash
-from travel_app import login_mngr, models, forms, flask_app, db
-
+from travel_app import login_mngr, models, forms, flask_app, db,images
 
 @login_mngr.user_loader
 def load_user(userid):
@@ -33,10 +34,10 @@ def login():
         flask_login.login_user(user, remember=form.remember.data)
         return flask.redirect('/')
 
-    return flask.render_template('login.html',form=form)
+    return flask.render_template('login.html', form=form)
 
 
-@flask_app.route('/signup', methods=['GET','POST'])
+@flask_app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = forms.LoginForm()
 
@@ -48,7 +49,8 @@ def signup():
             return flask.redirect('/signup')
 
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-        new_user = models.User(email=form.email.data, name=form.name.data, password=generate_password_hash(form.password.data, method='sha256'))
+        new_user = models.User(email=form.email.data, name=form.name.data,
+                               password=generate_password_hash(form.password.data, method='scrypt'))
 
         # add the new user to the database
         db.session.add(new_user)
@@ -56,10 +58,31 @@ def signup():
 
         return flask.redirect('login')
 
-    return flask.render_template('signup.html',form=form)
+    return flask.render_template('signup.html', form=form)
 
 
 @flask_app.route('/logout')
 def logout():
     flask_login.logout_user()
     return flask.redirect('/')
+
+
+@flask_app.route('/hikes')
+def show_hikes():
+    return flask.render_template('hikes.html')
+
+
+@flask_app.route('/add_hike', methods=['GET', 'POST'])
+def add_hike():
+    form = forms.AddHike()
+    # regions= [(c.category_id, c.category_name) for c in Category.query.all()]
+    if form.validate_on_submit():
+        new_hike = models.Hike(hike_name=form.hike_name.data, length_km=form.length_km.data, time=form.time.data, region=form.region.data, level=form.level.data, season=form.season.data, category=form.category.data, for_who=form.people.data,water=form.water.data)
+        for file in form.images.data:
+            filename=images.save(file)
+
+            # new_image=models.Picture()
+        db.session.add(new_hike)
+        db.session.commit()
+        return 'successfully added!'
+    return flask.render_template('hikes.html', form=form)
