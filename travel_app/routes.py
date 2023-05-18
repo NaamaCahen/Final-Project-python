@@ -5,6 +5,7 @@ import flask
 import flask_login
 from werkzeug.security import check_password_hash, generate_password_hash
 from travel_app import login_mngr, models, forms, flask_app, db, images
+from travel_app.models import Region, Hike, Season, Level, Category, Picture, ForWho
 
 
 @login_mngr.user_loader
@@ -70,7 +71,21 @@ def logout():
 
 @flask_app.route('/hikes')
 def show_hikes():
-    return flask.render_template('hikes.html')
+    hikes = db.session.query(Hike.hike_name,
+                             Hike.length_km,
+                             Hike.time,
+                             Region.region_name,
+                             Level.level_name,
+                             Season.season_name,
+                             Category.category_name,
+                             ForWho.people_name,
+                             Hike.water).join(Region, Hike.region == Region.region_id) \
+                                        .join(Level, Hike.level == Level.level_id)\
+                                        .join(Season, Hike.season == Season.season_id)\
+                                        .join(Category, Hike.category == Category.category_id)\
+                                        .join(ForWho, Hike.for_who == ForWho.people_id).all()
+
+    return flask.render_template('hikes.html', hikes=hikes)
 
 
 @flask_app.route('/add_hike', methods=['GET', 'POST'])
@@ -84,11 +99,11 @@ def add_hike():
         db.session.add(new_hike)
         db.session.commit()
         current_id = models.Hike.query.filter_by(hike_name=new_hike.hike_name).first().hike_id
-        if form.images.data[0].filename is not '':
+        if form.images.data[0].filename != '':
             for file in form.images.data:
                 filename = images.save(file)
                 new_image = models.Picture(url='../static/images/' + filename, hike_id=current_id)
                 db.session.add(new_image)
         db.session.commit()
         return 'successfully added!'
-    return flask.render_template('hikes.html', form=form)
+    return flask.render_template('add_hike.html', form=form)
