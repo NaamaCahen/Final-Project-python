@@ -12,8 +12,8 @@ class LoginForm(flask_wtf.FlaskForm):
 
 
 class AddHike(flask_wtf.FlaskForm):
-    hike_name = wtforms.StringField('name')
-    length_km = wtforms.FloatField('km')
+    hike_name = wtforms.StringField('name', [wtforms.validators.DataRequired()])
+    length_km = wtforms.FloatField('km', [wtforms.validators.DataRequired()])
     time = wtforms.FloatField('how long')
     region = wtforms.SelectField('regions', choices=[(r.region_id, r.region_name) for r in Region.query.all()])
     level = wtforms.SelectField('level', choices=[(l.level_id, l.level_name) for l in Level.query.all()])
