@@ -4,7 +4,8 @@ import travel_app
 import flask
 import flask_login
 from werkzeug.security import check_password_hash, generate_password_hash
-from travel_app import login_mngr, models, forms, flask_app, db,images
+from travel_app import login_mngr, models, forms, flask_app, db, images
+
 
 @login_mngr.user_loader
 def load_user(userid):
@@ -77,12 +78,17 @@ def add_hike():
     form = forms.AddHike()
     # regions= [(c.category_id, c.category_name) for c in Category.query.all()]
     if form.validate_on_submit():
-        new_hike = models.Hike(hike_name=form.hike_name.data, length_km=form.length_km.data, time=form.time.data, region=form.region.data, level=form.level.data, season=form.season.data, category=form.category.data, for_who=form.people.data,water=form.water.data)
-        for file in form.images.data:
-            filename=images.save(file)
-
-            # new_image=models.Picture()
+        new_hike = models.Hike(hike_name=form.hike_name.data, length_km=form.length_km.data, time=form.time.data,
+                               region=form.region.data, level=form.level.data, season=form.season.data,
+                               category=form.category.data, for_who=form.people.data, water=form.water.data)
         db.session.add(new_hike)
+        db.session.commit()
+        current_id = models.Hike.query.filter_by(hike_name=new_hike.hike_name).first().hike_id
+        if form.images.data[0].filename is not '':
+            for file in form.images.data:
+                filename = images.save(file)
+                new_image = models.Picture(url='../static/images/' + filename, hike_id=current_id)
+                db.session.add(new_image)
         db.session.commit()
         return 'successfully added!'
     return flask.render_template('hikes.html', form=form)
