@@ -5,15 +5,55 @@
     <title>hikes</title>
 </head>
 <body>
+  <form method="POST">
+            {{ form.hidden_tag() }}
+            <h3>Search</h3>
+
+            {{form.length_km.label}}
+            {{form.length_km(placeholder="length km", class="m-2 form-control")}}
+
+            {{form.time.label}}
+            {{form.time( placeholder="how long? [hours]", class="m-2 form-control")}}
+
+            {{form.region.label}}
+            {{form.region()}}
+
+            {{form.level.label}}
+            {{form.level()}}
+
+            {{form.season.label}}
+            {{form.season()}}
+
+            {{form.category.label}}
+            {{form.category()}}
+
+            {{form.people.label}}
+            {{form.people()}}
+
+            {{form.water.label}}
+            {{form.water()}}
+
+            {{form.search(class="btn btn-primary m-2")}}
+
+            <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>
+
+        </form>
+
 <h1>All The Hikes:</h1>
     {% for hike in hikes %}
         <div>
             <h3>{{hike.hike_name}}</h3>
+            <p>description: {{hike.text}}</p>
             <p>length (km): {{hike.length_km}}</p>
             <p>how long? {{hike.time}} hours</p>
             <p>region: {{hike.region_name}}</p>
             <p>level: {{hike.level_name}}</p>
-            <p>season: {{hike.season_name}}</p>
+            <p>seasons:</p>
+            <p>summer: {{hike.summer}}</p>
+            <p>winter: {{hike.winter}}</p>
+            <p>autumn: {{hike.autumn}}</p>
+            <p>spring: {{hike.spring}}</p>
+            <p>rainy days: {{hike.rainy_days}}</p>
             <p>category: {{hike.category_name}}</p>
             <p>participants: {{hike.people_name}}</p>
             <p>water? {{hike.water}}</p>

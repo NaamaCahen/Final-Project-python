@@ -15,11 +15,26 @@
 
             {{form.time( placeholder="how long? [hours]", class="m-2 form-control")}}
 
+            {{form.text(placeholder="hike description")}}
+
             {{form.region()}}
 
             {{form.level()}}
 
-            {{form.season()}}
+            {{form.summer.label}}
+            {{form.summer()}}
+
+            {{form.winter.label}}
+            {{form.winter()}}
+
+            {{form.autumn.label}}
+            {{form.autumn()}}
+
+            {{form.spring.label}}
+            {{form.spring()}}
+
+            {{form.rainy_days.label}}
+            {{form.rainy_days()}}
 
             {{form.category()}}
 
