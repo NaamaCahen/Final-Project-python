@@ -10,3 +10,4 @@ db_info = {'host': 'topsy.db.elephantsql.com',
 class Config:
     SECRET_KEY = random._urandom(56)
     SQLALCHEMY_DATABASE_URI = f"postgresql://{db_info['user']}:{db_info['psw']}@{db_info['host']}/{db_info['database']}"
+    UPLOADED_IMAGES_DEST = 'travel_app/static/images'

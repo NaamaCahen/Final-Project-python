@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Hike</title>
+</head>
+<body>
+  <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <h3>New Hike</h3>
+
+            {{form.hike_name(placeholder="name", class="m-2 form-control")}}
+
+            {{form.length_km(placeholder="length km", class="m-2 form-control")}}
+
+            {{form.time( placeholder="how long? [hours]", class="m-2 form-control")}}
+
+            {{form.text(placeholder="hike description")}}
+
+            {{form.region()}}
+
+            {{form.level()}}
+
+            {{form.summer.label}}
+            {{form.summer()}}
+
+            {{form.winter.label}}
+            {{form.winter()}}
+
+            {{form.autumn.label}}
+            {{form.autumn()}}
+
+            {{form.spring.label}}
+            {{form.spring()}}
+
+            {{form.rainy_days.label}}
+            {{form.rainy_days()}}
+
+            {{form.category()}}
+
+            {{form.people()}}
+
+            {{form.water.label}}
+            {{form.water()}}
+
+            {{form.images.label}}
+            {{form.images()}}
+
+            {{form.submit(class="btn btn-primary m-2")}}
+
+            <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>
+<!--            <p>{{ ', '.join(form.images.errors) }}</p>-->
+        </form>
+</body>
+</html>
