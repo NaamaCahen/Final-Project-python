@@ -173,7 +173,7 @@ def add_hike():
                     db.session.add(new_image)
                 except:
                     flask.flash('not allowed format!')
-                    flask.redirect('/add_hike')
+                    return flask.redirect('/add_hike')
         db.session.commit()
         return 'successfully added!'
     return flask.render_template('add_hike.html', form=form)
