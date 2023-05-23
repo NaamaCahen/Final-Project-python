@@ -88,11 +88,13 @@ class Thread(db.Model):
     thread_text = db.Column(db.Text)
     hike_id = db.Column(db.Integer, db.ForeignKey('hikes.hike_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    datetime = db.Column(db.DateTime)
     comments = db.relationship('Comment', backref='threads', lazy='dynamic')
 
 class Comment(db.Model):
     __tablename__ = 'comments'
     comment_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     comment_text = db.Column(db.Text, nullable=False)
+    datetime = db.Column(db.DateTime)
     thread_id = db.Column(db.Integer, db.ForeignKey('threads.thread_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
