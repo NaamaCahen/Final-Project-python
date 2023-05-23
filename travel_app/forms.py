@@ -39,10 +39,23 @@ lengths = ['','short', 'mid-length', 'long']
 class SearchForm(flask_wtf.FlaskForm):
     length_km = wtforms.SelectField('km', choices=lengths)
     time = wtforms.SelectField('how long', choices=lengths)
-    region = wtforms.SelectField('regions', choices=[("", "---")]+[(r.region_id, r.region_name) for r in Region.query.all()])
-    level = wtforms.SelectField('level', choices=[("", "---")]+[(l.level_id, l.level_name) for l in Level.query.all()])
+    region = wtforms.SelectField('regions', choices=[("", "")]+[(r.region_id, r.region_name) for r in Region.query.all()])
+    level = wtforms.SelectField('level', choices=[("", "")]+[(l.level_id, l.level_name) for l in Level.query.all()])
     season = wtforms.SelectField('season', choices=['','summer', 'winter', 'autumn', 'spring'])
-    category = wtforms.SelectField('category', choices=[("", "---")]+[(c.category_id, c.category_name) for c in Category.query.all()])
-    people = wtforms.SelectField('for who?', choices=[("", "---")]+[(p.people_id, p.people_name) for p in ForWho.query.all()])
+    category = wtforms.SelectField('category', choices=[("", "")]+[(c.category_id, c.category_name) for c in Category.query.all()])
+    people = wtforms.SelectField('for who?', choices=[("", "")]+[(p.people_id, p.people_name) for p in ForWho.query.all()])
     water = wtforms.BooleanField('with water?')
     search = wtforms.SubmitField('search')
+
+
+class AddThread(flask_wtf.FlaskForm):
+    title = wtforms.StringField('title',[wtforms.validators.DataRequired()])
+    text = wtforms.TextAreaField('thread text')
+    hike_id = wtforms.IntegerField('hike id')
+    add = wtforms.SubmitField('add')
+
+
+class AddComment(flask_wtf.FlaskForm):
+    comment_text = wtforms.TextAreaField('comment text')
+    thread_id = wtforms.IntegerField('thread id')
+    add_comment = wtforms.SubmitField('add')
