@@ -142,9 +142,13 @@ def add_hike():
         current_id = models.Hike.query.filter_by(hike_name=new_hike.hike_name).first().hike_id
         if form.images.data[0].filename != '':
             for file in form.images.data:
-                filename = images.save(file)
-                new_image = models.Picture(url='../static/images/' + filename, hike_id=current_id)
-                db.session.add(new_image)
+                try:
+                    filename = images.save(file)
+                    new_image = models.Picture(url='../static/images/' + filename, hike_id=current_id)
+                    db.session.add(new_image)
+                except:
+                    flask.flash('not allowed format!')
+                    flask.redirect('/add_hike')
         db.session.commit()
         return 'successfully added!'
     return flask.render_template('add_hike.html', form=form)

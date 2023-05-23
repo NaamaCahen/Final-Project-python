@@ -49,7 +49,17 @@
             {{form.submit(class="btn btn-primary m-2")}}
 
             <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>
-<!--            <p>{{ ', '.join(form.images.errors) }}</p>-->
+
+            {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                      <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                  {% endif %}
+           {% endwith %}
+
         </form>
 </body>
 </html>
