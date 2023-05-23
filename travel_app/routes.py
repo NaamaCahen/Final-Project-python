@@ -116,15 +116,27 @@ def search_hike():
                                  Hike.text,
                                  Category.category_name,
                                  ForWho.people_name,
-                                 Hike.water).filter_by(region=region, level=level, category=category,
-                                                       for_who=forwho, water=water, hours_description=hours_description,
-                                                       km_description=km_description) \
-            .filter(eval(season) == True) \
+                                 Hike.water)
+        if region != '':
+            hikes=hikes.filter_by(region=region)
+        if level != '':
+            hikes=hikes.filter_by(level=level)
+        if category != '':
+            hikes=hikes.filter_by(category=category)
+        if forwho != '':
+            hikes=hikes.filter_by(for_who=forwho)
+        if hours_description != '':
+            hikes=hikes.filter_by(hours_description=hours_description)
+        if km_description != '':
+            hikes=hikes.filter_by(km_description=km_description)
+        if season != 'Hike.':
+            hikes=hikes.filter(eval(season) == True)
+        hikes=hikes.filter_by( water=water) \
             .join(Region, Hike.region == Region.region_id) \
             .join(Level, Hike.level == Level.level_id) \
             .join(Category, Hike.category == Category.category_id) \
             .join(ForWho, Hike.for_who == ForWho.people_id).all()
-        return flask.render_template('hikes.html', hikes=hikes, form=form, tread_form=thread_form)
+        return flask.render_template('hikes.html', hikes=hikes, form=form)
 
 
 @flask_app.route('/add_hike', methods=['GET', 'POST'])

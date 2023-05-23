@@ -42,7 +42,7 @@
 <h1>All The Hikes:</h1>
     {% for hike in hikes %}
         <div>
-            <h3>{{hike.hike_name}}</h3>
+            <h3>{{hike.hike_id}}.{{hike.hike_name}}</h3>
             <p>description: {{hike.text}}</p>
             <p>length (km): {{hike.length_km}}</p>
             <p>how long? {{hike.time}} hours</p>
