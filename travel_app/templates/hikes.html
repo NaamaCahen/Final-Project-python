@@ -5,7 +5,7 @@
     <title>hikes</title>
 </head>
 <body>
-  <form method="POST">
+  <form method="POST" action="/search">
             {{ form.hidden_tag() }}
             <h3>Search</h3>
 
@@ -57,7 +57,7 @@
             <p>category: {{hike.category_name}}</p>
             <p>participants: {{hike.people_name}}</p>
             <p>water? {{hike.water}}</p>
-        </div>
+            <a href={{url_for('show_hike',hike_id=hike.hike_id)}}>show in new tab</a>
     {% endfor %}
 </body>
 </html>
