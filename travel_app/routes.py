@@ -1,3 +1,5 @@
+import datetime
+
 import werkzeug.utils
 
 import travel_app
@@ -5,7 +7,7 @@ import flask
 import flask_login
 from werkzeug.security import check_password_hash, generate_password_hash
 from travel_app import login_mngr, models, forms, flask_app, db, images
-from travel_app.models import Region, Hike, Level, Category, Picture, ForWho
+from travel_app.models import Region, Hike, Level, Category, Picture, ForWho, Thread, Comment, User
 
 
 @login_mngr.user_loader
@@ -34,7 +36,7 @@ def login():
             return flask.redirect('/login')
 
         flask_login.login_user(user, remember=form.remember.data)
-        return flask.redirect('/')
+        return flask.redirect('/hikes')
 
     return flask.render_template('login.html', form=form)
 
@@ -72,47 +74,57 @@ def logout():
 @flask_app.route('/hikes', methods=['GET', 'POST'])
 def show_hikes():
     form = forms.SearchForm()
-    hikes = db.session.query(Hike.hike_name,
+    thread_form = forms.AddThread()
+    comment_form = forms.AddComment()
+    hikes = db.session.query(Hike.hike_name, Hike.hike_id,
                              Hike.length_km,
                              Hike.time,
                              Region.region_name,
                              Level.level_name,
-                             # Season.season_name,
                              Hike.summer, Hike.spring, Hike.winter, Hike.autumn, Hike.rainy_days,
+                             Hike.text,
                              Category.category_name,
                              ForWho.people_name,
                              Hike.water).join(Region, Hike.region == Region.region_id) \
         .join(Level, Hike.level == Level.level_id) \
         .join(Category, Hike.category == Category.category_id) \
-        .join(ForWho, Hike.for_who == ForWho.people_id).all()
+        .join(ForWho, Hike.for_who == ForWho.people_id) \
+        .all()
+    return flask.render_template('hikes.html', hikes=hikes, form=form, thread_form=thread_form,
+                                 comment_form=comment_form)
+
+
+@flask_app.route('/search', methods=['GET', 'POST'])
+def search_hike():
+    form = forms.SearchForm()
     # search form
     if form.validate_on_submit():
         region = form.region.data
         level = form.level.data
-        season = 'Hike.'+form.season.data
+        season = 'Hike.' + form.season.data
         category = form.category.data
         forwho = form.people.data
         water = form.water.data
-        hours_description=form.time.data
-        km_description=form.length_km.data
-        hikes = db.session.query(Hike.hike_name,
+        hours_description = form.time.data
+        km_description = form.length_km.data
+        hikes = db.session.query(Hike.hike_name, Hike.hike_id,
                                  Hike.length_km,
                                  Hike.time,
                                  Region.region_name,
                                  Level.level_name,
-                                 Hike.summer,Hike.winter,Hike.autumn,Hike.spring,Hike.rainy_days,
+                                 Hike.summer, Hike.winter, Hike.autumn, Hike.spring, Hike.rainy_days,
                                  Hike.text,
                                  Category.category_name,
                                  ForWho.people_name,
                                  Hike.water).filter_by(region=region, level=level, category=category,
-                                                       for_who=forwho, water=water, hours_description=hours_description, km_description=km_description) \
-                                            .filter(eval(season)==True)\
+                                                       for_who=forwho, water=water, hours_description=hours_description,
+                                                       km_description=km_description) \
+            .filter(eval(season) == True) \
             .join(Region, Hike.region == Region.region_id) \
             .join(Level, Hike.level == Level.level_id) \
             .join(Category, Hike.category == Category.category_id) \
             .join(ForWho, Hike.for_who == ForWho.people_id).all()
-        return flask.render_template('hikes.html', hikes=hikes, form=form)
-    return flask.render_template('hikes.html', hikes=hikes, form=form)
+        return flask.render_template('hikes.html', hikes=hikes, form=form, tread_form=thread_form)
 
 
 @flask_app.route('/add_hike', methods=['GET', 'POST'])
@@ -136,7 +148,8 @@ def add_hike():
                                winter=form.winter.data, km_description=km_description,
                                hours_description=hours_description,
                                autumn=form.autumn.data, spring=form.spring.data, rainy_days=form.rainy_days.data,
-                               category=form.category.data, for_who=form.people.data, water=form.water.data,text=form.text.data)
+                               category=form.category.data, for_who=form.people.data, water=form.water.data,
+                               text=form.text.data)
         db.session.add(new_hike)
         db.session.commit()
         current_id = models.Hike.query.filter_by(hike_name=new_hike.hike_name).first().hike_id
@@ -152,3 +165,36 @@ def add_hike():
         db.session.commit()
         return 'successfully added!'
     return flask.render_template('add_hike.html', form=form)
+
+
+@flask_app.route('/hike/<hike_id>', methods=['GET', 'POST'])
+def show_hike(hike_id):
+    add_Thread = forms.AddThread()
+    add_comment = forms.AddComment()
+    hike = db.session.query(Hike.hike_id, Hike.hike_name, Hike.length_km, Hike.time, Region.region_name,
+                            Level.level_name, Hike.summer, Hike.winter, Hike.autumn, Hike.spring, Hike.rainy_days,
+                            Category.category_name, ForWho.people_name, Hike.water).filter_by(hike_id=hike_id).join(
+        Region, Hike.region == Region.region_id).join(Level, Hike.level == Level.level_id).join(Category,
+                                                                                                Hike.category == Category.category_id).join(
+        ForWho, Hike.for_who == ForWho.people_id).first()
+    pictures = Picture.query.filter_by(hike_id=hike.hike_id)
+    threads = db.session.query(Thread.thread_id, Thread.title, Thread.thread_text, Thread.datetime,
+                               User.name).filter_by(hike_id=hike_id).join(User, Thread.user_id == User.user_id).all()
+    comments = db.session.query(Comment.comment_text, User.name, Comment.datetime, Comment.thread_id).join(User,
+                                                                                                           Comment.user_id == User.user_id).all()
+    if add_Thread.validate_on_submit():
+        new_thread = Thread(title=add_Thread.title.data, thread_text=add_Thread.text.data,
+                            user_id=flask_login.current_user.user_id, hike_id=add_Thread.hike_id.data,
+                            datetime=datetime.datetime.now())
+        db.session.add(new_thread)
+        db.session.commit()
+        return flask.redirect('/hike/' + hike_id)
+
+    if add_comment.validate_on_submit():
+        new_comment = Comment(comment_text=add_comment.comment_text.data, datetime=datetime.datetime.now(),
+                              thread_id=add_comment.thread_id.data, user_id=flask_login.current_user.user_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        return flask.redirect('/hike/' + hike_id)
+    return flask.render_template('hike.html', hike=hike, pictures=pictures, threads=threads, comments=comments,
+                                 add_thread=add_Thread, add_comment=add_comment)
