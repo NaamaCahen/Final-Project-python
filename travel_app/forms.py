@@ -39,6 +39,7 @@ lengths = ['','short', 'mid-length', 'long']
 class SearchForm(flask_wtf.FlaskForm):
     length_km = wtforms.SelectField('km', choices=lengths)
     time = wtforms.SelectField('how long', choices=lengths)
+    hike_name = wtforms.StringField('name')
     region = wtforms.SelectField('regions', choices=[("", "")]+[(r.region_id, r.region_name) for r in Region.query.all()])
     level = wtforms.SelectField('level', choices=[("", "")]+[(l.level_id, l.level_name) for l in Level.query.all()])
     season = wtforms.SelectField('season', choices=['','summer', 'winter', 'autumn', 'spring'])
