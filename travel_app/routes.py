@@ -1,5 +1,6 @@
 import datetime
 
+import sqlalchemy
 import werkzeug.utils
 
 import travel_app
@@ -107,6 +108,7 @@ def search_hike():
         water = form.water.data
         hours_description = form.time.data
         km_description = form.length_km.data
+        name = form.hike_name.data
         hikes = db.session.query(Hike.hike_name, Hike.hike_id,
                                  Hike.length_km,
                                  Hike.time,
@@ -118,20 +120,22 @@ def search_hike():
                                  ForWho.people_name,
                                  Hike.water)
         if region != '':
-            hikes=hikes.filter_by(region=region)
+            hikes = hikes.filter_by(region=region)
         if level != '':
-            hikes=hikes.filter_by(level=level)
+            hikes = hikes.filter_by(level=level)
         if category != '':
-            hikes=hikes.filter_by(category=category)
+            hikes = hikes.filter_by(category=category)
         if forwho != '':
-            hikes=hikes.filter_by(for_who=forwho)
+            hikes = hikes.filter_by(for_who=forwho)
         if hours_description != '':
-            hikes=hikes.filter_by(hours_description=hours_description)
+            hikes = hikes.filter_by(hours_description=hours_description)
         if km_description != '':
-            hikes=hikes.filter_by(km_description=km_description)
+            hikes = hikes.filter_by(km_description=km_description)
         if season != 'Hike.':
-            hikes=hikes.filter(eval(season) == True)
-        hikes=hikes.filter_by( water=water) \
+            hikes = hikes.filter(eval(season) == True)
+        if name != '':
+            hikes = hikes.filter(sqlalchemy.func.lower(Hike.hike_name).contains(name))
+        hikes = hikes.filter_by(water=water) \
             .join(Region, Hike.region == Region.region_id) \
             .join(Level, Hike.level == Level.level_id) \
             .join(Category, Hike.category == Category.category_id) \
