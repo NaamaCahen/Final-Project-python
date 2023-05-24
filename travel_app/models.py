@@ -6,7 +6,7 @@ class User(flask_login.UserMixin, db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(1000), nullable=False)
     name = db.Column(db.String(64))
     threads = db.relationship('Thread', backref='users', lazy='dynamic')
     comments = db.relationship('Comment', backref='users', lazy='dynamic')

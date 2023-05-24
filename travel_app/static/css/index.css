@@ -1,3 +1,10 @@
 body{
     background-color: orange;
+    font-family: Gabriola;
+}
+
+.login{
+    height: 50vh;
+    margin: auto;
+    margin-top: 20%;
 }

@@ -44,7 +44,7 @@ def login():
 
 @flask_app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    form = forms.LoginForm()
+    form = forms.SignUpForm()
 
     if form.validate_on_submit():
         # if it returns a user , the email already exists
