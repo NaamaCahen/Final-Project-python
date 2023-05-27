@@ -8,57 +8,69 @@
 {%endblock%}
 
 {%block content%}
-            <h1>{{hike.hike_name}}</h1>
-            <p>{{hike.text}}</p>
-            <p>length (km): {{hike.length_km}}</p>
-            <p>how long? {{hike.time}} hours</p>
-            <p>region: {{hike.region_name}}</p>
-            <p>level: {{hike.level_name}}</p>
-            <p>seasons:</p>
-            <p>summer: {{hike.summer}}</p>
-            <p>winter: {{hike.winter}}</p>
-            <p>autumn: {{hike.autumn}}</p>
-            <p>spring: {{hike.spring}}</p>
-            <p>rainy days: {{hike.rainy_days}}</p>
-            <p>category: {{hike.category_name}}</p>
-            <p>participants: {{hike.people_name}}</p>
-            <p>water? {{hike.water}}</p>
-
+            <h1 class="ttu f2 bb ma2">{{hike.hike_name}}</h1>
             {% for picture in pictures %}
-                <img src={{picture.url}} width="250">
+                <img src={{picture.url}} class="w-75 ">
             {%endfor%}
+        <div class="bg-white shadow-3 br2 pa3 ma3 f4">
+             <p><b>Description:</b> {{hike.text}}</p>
+            <p><b>Length:</b> {{hike.length_km}} km</p>
+            <p><b>How long?</b> {{hike.time}} hours</p>
+            <p><b>Region:</b> {{hike.region_name}}</p>
+            <p><b>Level:</b> {{hike.level_name}}</p>
+            <p class="b">Seasons:</p>
+            <li><b>summer:</b> {{hike.summer}}</li>
+            <li><b>winter: </b>{{hike.winter}}</li>
+            <li><b>autumn:</b> {{hike.autumn}}</li>
+            <li><b>spring:</b> {{hike.spring}}</li>
+            <li><b>rainy days:</b> {{hike.rainy_days}}</li>
+            <p><b>Category:</b> {{hike.category_name}}</p>
+            <p><b>Participants:</b> {{hike.people_name}}</p>
+            <p><b>Water?</b> {{hike.water}}</p>
+        </div>
+
 
             {% if threads%}
-                <h2>Threads</h2>
+                <h2  class="ma3 f2 bb pt3">Threads:</h2>
                 {%for thread in threads%}
-                    <h3>{{thread.title}}</h3>
-                    <span>{{thread.name}} {{thread.datetime}}</span>
+                <div id="{{thread.thread_id}}" class="bg-white shadow-3 ma3 pa3 br2 f4">
+                     <h3 class="f3">{{thread.title}}</h3>
+                    <span class="b">{{thread.name}} {{thread.datetime}}</span>
                     <p>{{thread.thread_text}}</p>
                     {%for comment in comments%}
                         {%if comment.thread_id == thread.thread_id%}
-                            <p>{{comment.name}}</p><span>{{comment.datetime}}</span>
+                        <div class="ml5">
+                            <p class="b">{{comment.name}}    {{comment.datetime}}</p>
                             <p>{{comment.comment_text}}</p>
+                        </div>
                         {%endif%}
                     {%endfor%}
-                    <form method="POST">
+                    <form method="POST" class="ml5">
                         {{add_comment.hidden_tag()}}
-                        <h5>new comment</h5>
-                        {{add_comment.comment_text()}}
-                        {{add_comment.thread_id(value=thread.thread_id)}}
-                        {{add_comment.add_comment()}}
+                        <h5>add comment</h5>
+                        {{add_comment.thread_id(value=thread.thread_id, class='dn')}}
+                        <div class="flex">
+                            {{add_comment.comment_text(placeholder="type here...")}}
+                            {{add_comment.add_comment()}}
+                        </div>
+
                     </form>
+                </div>
+
                 {% endfor %}
             {%endif%}
 
-            <form method="POST">
+            <form method="POST" class="bg-white br3 pa3 ma4 f4">
                 {{add_thread.hidden_tag()}}
                 <h5>Open New Thread</h5>
-                {{add_thread.title(placeholder='title')}}
-                {{add_thread.text()}}
-                {{add_thread.hike_id(value=hike.hike_id)}}
-                {{add_thread.add()}}
+                {{add_thread.hike_id(value=hike.hike_id, class="dn")}}
+                <div class="flex">
+                    {{add_thread.title(placeholder='title')}}
+                    {{add_thread.text(placeholder="type here...")}}
+                    {{add_thread.add()}}
+                </div>
+
             </form>
 
-            <a href={{url_for('show_hikes')}}>show all hikes</a>
 {%endblock%}
 </body>
