@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
+    <link rel="stylesheet" href="../static/css/index.css">
+</head>
+<body>
+{%block navbar%}
+<header class="bg-black-90 fixed w-100 nav">
+  <nav class="f5 fw6 ttu tracked flex justify-between items-center">
+      <div class="flex pa2">
+          <a class="link dim white dib mr3" href="/" title="Home">Home</a>
+          <a class="link dim white dib mr3" href="/hikes" title="Hikes">Hikes</a>
+          <a class="link dim white dib mr3" href="/login" title="Login">Login</a>
+          <a class="link dim white dib mr3" href="/signup" title="Signup">Signup</a>
+          <a class="link dim white dib " href="/logout" title="Logout">Logout</a>
+      </div>
+      <img src="../static/logos/Color_logo-no_background.png" class="dib w-10 pa2" alt="Site Logo">
+
+
+  </nav>
+</header>
+{%endblock%}
+
+{%block content%}
+{%endblock%}
+</body>
+
+</html>

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>hike</title>
-</head>
+{% extends 'base.html'%}
+
+
 <body>
+{%block navbar%}
+    {{super()}}
+{%endblock%}
+
+{%block content%}
             <h1>{{hike.hike_name}}</h1>
             <p>{{hike.text}}</p>
             <p>length (km): {{hike.length_km}}</p>
@@ -57,5 +60,5 @@
             </form>
 
             <a href={{url_for('show_hikes')}}>show all hikes</a>
+{%endblock%}
 </body>
-</html>

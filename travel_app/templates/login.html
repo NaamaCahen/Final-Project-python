@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>login</title>
-    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
-    <link rel="stylesheet" href="../static/css/index.css">
+{%extends 'base.html'%}
 
-</head>
 <body class="bg-warning">
+    {% block navbar%}
+        {{super()}}
+    {%endblock%}
+    {%block content%}
     <div class="bg-white shadow-2 w-50 h-50 login">
         <form  method="POST">
             {{ form.hidden_tag() }}
@@ -40,6 +38,5 @@
             </div>
         </form>
     </div>
-
+{%endblock%}
 </body>
-</html>

@@ -1,6 +1,7 @@
 body{
     background-color: orange;
     font-family: Gabriola;
+    box-sizing: border-box;
 }
 
 .login{
@@ -8,3 +9,14 @@ body{
     margin: auto;
     margin-top: 20%;
 }
+
+.card{
+    background-color: white;
+    border: solid 2px blue;
+    width: 45%;
+}
+
+.nav{
+    top: 0px;
+}
+

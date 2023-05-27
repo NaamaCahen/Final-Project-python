@@ -183,7 +183,7 @@ def add_hike():
     return flask.render_template('add_hike.html', form=form)
 
 
-@flask_app.route('/hike/<hike_id>', methods=['GET', 'POST'])
+@flask_app.route('/hike<hike_id>', methods=['GET', 'POST'])
 def show_hike(hike_id):
     add_Thread = forms.AddThread()
     add_comment = forms.AddComment()
@@ -204,13 +204,13 @@ def show_hike(hike_id):
                             datetime=datetime.datetime.now())
         db.session.add(new_thread)
         db.session.commit()
-        return flask.redirect('/hike/' + hike_id)
+        return flask.redirect('/hike' + hike_id)
 
     if add_comment.validate_on_submit():
         new_comment = Comment(comment_text=add_comment.comment_text.data, datetime=datetime.datetime.now(),
                               thread_id=add_comment.thread_id.data, user_id=flask_login.current_user.user_id)
         db.session.add(new_comment)
         db.session.commit()
-        return flask.redirect('/hike/' + hike_id)
+        return flask.redirect('/hike' + hike_id)
     return flask.render_template('hike.html', hike=hike, pictures=pictures, threads=threads, comments=comments,
                                  add_thread=add_Thread, add_comment=add_comment)

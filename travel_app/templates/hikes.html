@@ -1,65 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>hikes</title>
-</head>
+{%extends 'base.html'%}
 <body>
-  <form method="POST" action="/search">
-            {{ form.hidden_tag() }}
-            <h3>Search</h3>
+{%block navbar%}
+    {{super()}}
+{%endblock%}
 
+{%block content%}
+  <form method="POST" action="/search" class="bg-white ma2 pa2 f3 shadow-2">
+            {{ form.hidden_tag() }}
+      <h3>Search</h3>
+      <div class="flex flex-wrap">
             {{form.length_km.label}}
-            {{form.length_km(placeholder="length km", class="m-2 form-control")}}
+            {{form.length_km(placeholder="length km", class="ma2")}}
 
             {{form.time.label}}
-            {{form.time( placeholder="how long? [hours]", class="m-2 form-control")}}
+            {{form.time( placeholder="how long? [hours]", class="ma2")}}
 
-            {{form.hike_name(placeholder="name")}}
+            {{form.hike_name(placeholder="name", class="ma2")}}
 
             {{form.region.label}}
-            {{form.region()}}
+            {{form.region(class="ma2")}}
 
             {{form.level.label}}
-            {{form.level()}}
+            {{form.level( class="ma2")}}
 
             {{form.season.label}}
-            {{form.season()}}
+            {{form.season(class="ma2")}}
 
             {{form.category.label}}
-            {{form.category()}}
+            {{form.category(class="ma2")}}
 
             {{form.people.label}}
-            {{form.people()}}
+            {{form.people(class="ma2")}}
 
+            {{form.water(class="ma2")}}
             {{form.water.label}}
-            {{form.water()}}
 
-            {{form.search(class="btn btn-primary m-2")}}
+
+            {{form.search(class="ma2")}}
 
             <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>
+
+            </div>
 
         </form>
 
 <h1>All The Hikes:</h1>
-    {% for hike in hikes %}
-        <div>
-            <h3>{{hike.hike_id}}.{{hike.hike_name}}</h3>
-            <p>description: {{hike.text}}</p>
-            <p>length (km): {{hike.length_km}}</p>
-            <p>how long? {{hike.time}} hours</p>
-            <p>region: {{hike.region_name}}</p>
-            <p>level: {{hike.level_name}}</p>
-            <p>seasons:</p>
-            <p>summer: {{hike.summer}}</p>
-            <p>winter: {{hike.winter}}</p>
-            <p>autumn: {{hike.autumn}}</p>
-            <p>spring: {{hike.spring}}</p>
-            <p>rainy days: {{hike.rainy_days}}</p>
-            <p>category: {{hike.category_name}}</p>
-            <p>participants: {{hike.people_name}}</p>
-            <p>water? {{hike.water}}</p>
+  <div class="flex flex-wrap">
+        {% for hike in hikes %}
+        <div class=" bg-light-gray br2 card pa2 ma3 shadow-2  f3" >
+            <h3 class="bb">{{hike.hike_name}}</h3>
+            <p><b>description:</b> {{hike.text}}</p>
+            <p><b>length (km):</b> {{hike.length_km}}</p>
+            <p><b>how long?</b> {{hike.time}} hours</p>
+            <p><b>region:</b> {{hike.region_name}}</p>
+            <p><b>level:</b> {{hike.level_name}}</p>
+            <p class="b">seasons:</p>
+            <li><b>summer:</b> {{hike.summer}}</li>
+            <li><b>winter: </b>{{hike.winter}}</li>
+            <li><b>autumn:</b> {{hike.autumn}}</li>
+            <li><b>spring:</b> {{hike.spring}}</li>
+            <li><b>rainy days:</b> {{hike.rainy_days}}</li>
+            <p><b>category:</b> {{hike.category_name}}</p>
+            <p><b>participants:</b> {{hike.people_name}}</p>
+            <p><b>water?</b> {{hike.water}}</p>
             <a href={{url_for('show_hike',hike_id=hike.hike_id)}}>show in new tab</a>
+        </div>
     {% endfor %}
+  </div>
+{%endblock%}
 </body>
-</html>
