@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>home</title>
-    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
-    <link rel="stylesheet" href="../static/css/index.css">
-</head>
+{%extends 'base.html'%}
 <body>
+{%block navbar%}
+    {{super()}}
+{%endblock%}
+
+{%block content%}
     <img src="../static/logos/Color_logo_with_background.png" width="100%">
     <div class="flex justify-center">
           <a class="f2 link dim br3 ph3 pv2 mb2 dib white bg-blue ma2" href="/login">Login</a>
           <a class="f2 link dim br3 ph3 pv2 mb2 dib white bg-blue ma2" href="/signup">Sign Up</a>
 
     </div>
-
+{%endblock%}
 
 </body>
 </html>
