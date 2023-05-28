@@ -20,3 +20,12 @@ body{
     top: 0px;
 }
 
+.m-auto{
+    margin:auto;
+}
+
+.m-left-12{
+    margin-left: 12.5%;
+}
+
+

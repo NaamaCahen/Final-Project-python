@@ -48,7 +48,7 @@
 <h1>All The Hikes:</h1>
   <div class="flex flex-wrap">
         {% for hike in hikes %}
-        <div class=" bg-light-gray br2 card pa2 ma3 shadow-2  f3" >
+        <div id="{{hike.hike_id}}" class=" bg-light-gray br2 card pa2 ma3 shadow-2  f3" >
             <h3 class="bb">{{hike.hike_name}}</h3>
             <p><b>description:</b> {{hike.text}}</p>
             <p><b>length (km):</b> {{hike.length_km}}</p>

@@ -1,52 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>New Hike</title>
-</head>
+{%extends 'base.html'%}
 <body>
-  <form method="POST" enctype="multipart/form-data">
+{%block navbar%}
+    {{super()}}
+{%endblock%}
+
+{%block content%}
+  <form method="POST" enctype="multipart/form-data" class="bg-white flex flex-column w-50 m-auto pa3 f3 shadow-2">
             {{ form.hidden_tag() }}
             <h3>New Hike</h3>
 
-            {{form.hike_name(placeholder="name", class="m-2 form-control")}}
 
-            {{form.length_km(placeholder="length km", class="m-2 form-control")}}
+                {{form.hike_name(placeholder="name", class="ma2")}}
+                <div class="ma2">
+                      {{form.length_km(placeholder="length km", class="ma2 ")}}
 
-            {{form.time( placeholder="how long? [hours]", class="m-2 form-control")}}
+                      {{form.time( placeholder="how long? [hours]", class="ma2 ")}}
+                </div>
 
-            {{form.text(placeholder="hike description")}}
 
-            {{form.region()}}
 
-            {{form.level()}}
+            {{form.text(placeholder="hike description", class="ma2")}}
 
-            {{form.summer.label}}
-            {{form.summer()}}
+            <div class="ma2">
+                {{form.summer.label}}
+                {{form.summer()}}
 
-            {{form.winter.label}}
-            {{form.winter()}}
+                {{form.winter.label}}
+                {{form.winter()}}
 
-            {{form.autumn.label}}
-            {{form.autumn()}}
+                {{form.autumn.label}}
+                {{form.autumn()}}
 
-            {{form.spring.label}}
-            {{form.spring()}}
+                {{form.spring.label}}
+                {{form.spring()}}
 
-            {{form.rainy_days.label}}
-            {{form.rainy_days()}}
+                {{form.rainy_days.label}}
+                {{form.rainy_days()}}
+            </div>
 
-            {{form.category()}}
+            <div class="ma2">
+                {{form.region()}}
 
-            {{form.people()}}
+                {{form.level()}}
 
-            {{form.water.label}}
-            {{form.water()}}
+                {{form.category()}}
+
+                {{form.people()}}
+
+                {{form.water.label}}
+                {{form.water()}}
+            </div>
+
 
             {{form.images.label}}
-            {{form.images(accept="image/png, image/jpeg")}}
+            {{form.images(accept="image/png, image/jpeg", class='ma2')}}
 
-            {{form.submit(class="btn btn-primary m-2")}}
+            {{form.submit(class="ma2")}}
 
             <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>
 
@@ -61,5 +71,6 @@
            {% endwith %}
 
         </form>
+{%endblock%}
 </body>
 </html>
