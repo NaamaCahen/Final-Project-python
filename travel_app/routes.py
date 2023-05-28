@@ -42,9 +42,14 @@ def login():
     return flask.render_template('login.html', form=form)
 
 
+@login_mngr.unauthorized_handler
+def unauthorized_callback():
+    return flask.redirect('/login')
+
+
 @flask_app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    form = forms.LoginForm()
+    form = forms.SignUpForm()
 
     if form.validate_on_submit():
         # if it returns a user , the email already exists
@@ -73,6 +78,7 @@ def logout():
 
 
 @flask_app.route('/hikes', methods=['GET', 'POST'])
+@flask_login.login_required
 def show_hikes():
     form = forms.SearchForm()
     thread_form = forms.AddThread()
@@ -144,6 +150,7 @@ def search_hike():
 
 
 @flask_app.route('/add_hike', methods=['GET', 'POST'])
+@flask_login.login_required
 def add_hike():
     form = forms.AddHikeForm()
     if form.validate_on_submit():
@@ -179,11 +186,12 @@ def add_hike():
                     flask.flash('not allowed format!')
                     return flask.redirect('/add_hike')
         db.session.commit()
-        return 'successfully added!'
+        return flask.redirect('/hikes#' + str(current_id))
     return flask.render_template('add_hike.html', form=form)
 
 
-@flask_app.route('/hike/<hike_id>', methods=['GET', 'POST'])
+@flask_app.route('/hike<hike_id>', methods=['GET', 'POST'])
+@flask_login.login_required
 def show_hike(hike_id):
     add_Thread = forms.AddThread()
     add_comment = forms.AddComment()
@@ -204,13 +212,13 @@ def show_hike(hike_id):
                             datetime=datetime.datetime.now())
         db.session.add(new_thread)
         db.session.commit()
-        return flask.redirect('/hike/' + hike_id)
+        return flask.redirect('/hike' + hike_id + '#' + str(new_thread.thread_id))
 
     if add_comment.validate_on_submit():
         new_comment = Comment(comment_text=add_comment.comment_text.data, datetime=datetime.datetime.now(),
                               thread_id=add_comment.thread_id.data, user_id=flask_login.current_user.user_id)
         db.session.add(new_comment)
         db.session.commit()
-        return flask.redirect('/hike/' + hike_id)
+        return flask.redirect('/hike' + hike_id + '#' + str(add_comment.thread_id.data))
     return flask.render_template('hike.html', hike=hike, pictures=pictures, threads=threads, comments=comments,
                                  add_thread=add_Thread, add_comment=add_comment)

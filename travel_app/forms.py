@@ -6,10 +6,17 @@ from travel_app import images
 
 
 class LoginForm(flask_wtf.FlaskForm):
-    email = wtforms.EmailField('email')
-    password = wtforms.PasswordField('password')
-    name = wtforms.StringField('name')
-    remember = wtforms.BooleanField('remember')
+    email = wtforms.EmailField('email',[wtforms.validators.DataRequired()])
+    password = wtforms.PasswordField('password',[wtforms.validators.DataRequired()])
+    remember = wtforms.BooleanField('remember me?')
+    submit = wtforms.SubmitField('submit')
+
+
+class SignUpForm(flask_wtf.FlaskForm):
+    email = wtforms.EmailField('email',[wtforms.validators.DataRequired()])
+    password = wtforms.PasswordField('password',[wtforms.validators.DataRequired()])
+    name = wtforms.StringField('name',[wtforms.validators.DataRequired()])
+    remember = wtforms.BooleanField('remember me?')
     submit = wtforms.SubmitField('submit')
 
 

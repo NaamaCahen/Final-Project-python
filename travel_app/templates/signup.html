@@ -1,22 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>signup</title>
-</head>
+
+{%extends 'base.html'%}
+
 <body>
- <form  method="POST">
-            {{ form.hidden_tag() }}
-            <h3>signup</h3>
-            {{form.name(placeholder="name")}}
+{%block navbar%}
+    {{super()}}
+{%endblock%}
 
-            {{form.email(placeholder="email")}}
+{%block content%}
+<div class="bg-white shadow-2 w-50 h-50 login">
+     <form  method="POST">
+                {{ form.hidden_tag() }}
+         <div class="flex flex-column ">
+                <h2 class="ma3 pa2">signup</h2>
+                {{form.name(placeholder="name",class="ma3 pa2")}}
 
-            {{form.password(placeholder="password")}}
+                {{form.email(placeholder="email",class="ma3 pa2")}}
 
-            {{form.submit()}}
+                {{form.password(placeholder="password",class="ma3 pa2")}}
 
-<!--            <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>-->
-        </form>
+                {{form.submit(class="ma3 pa2")}}
+
+                {%for message in get_flashed_messages()%}
+                <div class="flex items-center justify-center pa4 bg-red ">
+                  <svg class="w1" data-icon="info" viewBox="0 0 32 32" style="fill:currentcolor">
+                    <title>info icon</title>
+                    <path d="M16 0 A16 16 0 0 1 16 32 A16 16 0 0 1 16 0 M19 15 L13 15 L13 26 L19 26 z M16 6 A3 3 0 0 0 16 12 A3 3 0 0 0 16 6"></path>
+                  </svg>
+                  <span class="lh-title ml3">{{message}}</span>
+                </div>
+                {% endfor %}
+
+                <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>
+         </div>
+            </form>
+</div>
+{%endblock%}
 </body>
-</html>

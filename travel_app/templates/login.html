@@ -1,24 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>login</title>
-</head>
-<body>
-     <form  method="POST">
+{%extends 'base.html'%}
+
+<body class="bg-warning">
+    {% block navbar%}
+        {{super()}}
+    {%endblock%}
+    {%block content%}
+    <div class="bg-white shadow-2 w-50 h-50 login">
+        <form  method="POST">
             {{ form.hidden_tag() }}
-            <h3>LOGIN</h3>
+            <div class="flex flex-column ">
+                <h2 class="pa2">LOGIN</h2>
 
-            {{form.email(placeholder="email")}}
+                {{form.email(placeholder="email", class="ma3 pa2")}}
 
-            {{form.password(placeholder="password")}}
+                {{form.password(placeholder="password", class="ma3 pa2")}}
+
+                <div>
+                    {{form.remember(class="ma3 pa2")}}
+                    {{form.remember.label}}
+                </div>
 
 
-            {{form.remember()}}
+                {{form.submit(class="ma3 pa2")}}
 
-            {{form.submit()}}
+                {%for message in get_flashed_messages()%}
+                <div class="flex items-center justify-center pa4 bg-red ">
+                  <svg class="w1" data-icon="info" viewBox="0 0 32 32" style="fill:currentcolor">
+                    <title>info icon</title>
+                    <path d="M16 0 A16 16 0 0 1 16 32 A16 16 0 0 1 16 0 M19 15 L13 15 L13 26 L19 26 z M16 6 A3 3 0 0 0 16 12 A3 3 0 0 0 16 6"></path>
+                  </svg>
+                  <span class="lh-title ml3">{{message}}</span>
+                </div>
+                {% endfor %}
 
-<!--            <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>-->
+                <p>{% for error in form.errors.items() %} {{ error[1][0] }} {% endfor %}</p>
+            </div>
         </form>
+    </div>
+{%endblock%}
 </body>
-</html>
