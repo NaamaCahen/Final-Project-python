@@ -60,7 +60,7 @@ def signup():
 
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
         new_user = models.User(email=form.email.data, name=form.name.data,
-                               password=generate_password_hash(form.password.data, method='scrypt'))
+                               password=generate_password_hash(form.password.data))
 
         # add the new user to the database
         db.session.add(new_user)
